@@ -7,7 +7,18 @@ const urlRoute = require("./routes/url");
 
 const app = express();
 
-// DB connection control
+// ✅ CORS must be FIRST — before any other middleware
+const corsOptions = {
+  origin: "https://url-xi87.vercel.app", // your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // ✅ explicitly handle preflight for ALL routes
+
+// DB connection middleware (after CORS)
 let isConnected = false;
 async function connect() {
   if (!isConnected) {
@@ -16,14 +27,12 @@ async function connect() {
   }
 }
 
-// Middleware
 app.use(async (req, res, next) => {
   await connect();
   next();
 });
 
 app.use(express.json());
-app.use(cors());
 
 // Routes
 app.get("/", (req, res) => {
