@@ -2,8 +2,8 @@ const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
 
-const { connectDB } = require("../connect");
-const urlRoute = require("../routes/url");
+const { connectDB } = require("./connect");
+const urlRoute = require("./routes/url");
 
 const app = express();
 
